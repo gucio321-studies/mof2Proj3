@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def ex1():
+def ex3():
     target_iterations = int(1e4)
     time_step = 100
 
@@ -11,11 +11,48 @@ def ex1():
     p = []
     for i in range(target_iterations):
         if i % time_step == 0:
-            p.append(np.abs(b.psi[0])**2)
+            p.append(np.abs(b.psi[0]) ** 2)
 
         b.time_step()
-    plt.imshow(p)
-    plt.show()
+
+    fig, ax = plt.subplots()
+    ax.pcolormesh(
+        b.x * b.A0,
+        np.linspace(0, target_iterations, int(target_iterations / time_step)),
+        p,
+    )
+    ax.set_xlabel("Położenie [m]")
+    ax.set_ylabel("Czas [dt]")
+    fig.savefig("ex3.svg", format="svg")
+    plt.close(fig)
+
+
+def ex4():
+    target_iterations = int(1e4)
+    time_step = 100
+    b = base()
+    xs = []
+    xs_analitical = []
+    for i in range(target_iterations):
+        if i % time_step == 0:
+            xs.append(b.xExp())
+            xs_analitical.append(b.k * i / b.m - b.eF * i**2 / (2 * b.m))
+
+        b.time_step()
+
+    t = np.linspace(0, target_iterations, int(target_iterations / time_step))
+    fig, ax = plt.subplots()
+
+    ax.plot(t, np.array(xs) * b.A0, label="Rozwiązanie numeryczne")
+    ax.plot(t, np.array(xs_analitical) * b.A0, label="Rozwiązanie analityczne")
+    ax.legend()
+    ax.set_xlabel("Czas [dt]")
+    ax.set_ylabel("$\\left<x\\right>$ [m]")
+    ax.grid()
+
+    fig.savefig("ex4.svg", format="svg")
+    plt.close(fig)
+
 
 class base:
     def __init__(
@@ -37,7 +74,7 @@ class base:
         self.dx = self.L / N  # in ab
         self.sigma = sigma / self.A0
         self.k = k * self.A0
-        self.dt = dt # lets say dt is already in AU. # / const.physical_constants["atomic unit of time"][0]
+        self.dt = dt  # lets say dt is already in AU. # / const.physical_constants["atomic unit of time"][0]
         self.__init_grid()
 
     def __init_grid(self):
@@ -83,3 +120,6 @@ class base:
 
     def Eavg(self, psi):
         return self.dx * np.sum(psi[1 : 2 * self.N].conj() * self.Hamiltonian(psi))
+
+    def xExp(self, ax=0):
+        return self.dx * np.sum(np.abs(self.psi[ax]) ** 2 * self.x)

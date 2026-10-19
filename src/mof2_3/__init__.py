@@ -1,4 +1,5 @@
 from . import ex
 
 def main() -> None:
-    ex.ex1()
+    ex.ex3()
+    ex.ex4()
