@@ -1,10 +1,16 @@
 import scipy.constants as const
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def ex1():
+    target_iterations = 1e4
+    time_step = 100
+
     b = base()
-    b.time_step()
+#    for i in range(target_iterations):
+#        b.time_step()
+#    b.time_step()
 
 class base:
     def __init__(
@@ -26,7 +32,7 @@ class base:
         self.dx = self.L / N  # in ab
         self.sigma = sigma / self.A0
         self.k = k * self.A0
-        self.dt = dt * const.physical_constants["atomic unit of time"][0]
+        self.dt = dt / const.physical_constants["atomic unit of time"][0]
         self.__init_grid()
 
     def __init_grid(self):
