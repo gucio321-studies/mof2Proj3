@@ -49,7 +49,7 @@ class base:
         )
 
     def normalize(self, axis=1):
-        C = np.sqrt(self.dx * (self.psi[axis] ** 2).sum())
+        C = np.sqrt(self.dx * (self.psi[axis].conj() * self.psi[axis]).sum())
         self.psi[axis] /= C
 
     def V(self, x):
