@@ -4,13 +4,18 @@ import matplotlib.pyplot as plt
 
 
 def ex1():
-    target_iterations = 1e4
+    target_iterations = int(1e4)
     time_step = 100
 
     b = base()
-#    for i in range(target_iterations):
-#        b.time_step()
-#    b.time_step()
+    p = []
+    for i in range(target_iterations):
+        if i % time_step == 0:
+            p.append(np.abs(b.psi[0])**2)
+
+        b.time_step()
+    plt.imshow(p)
+    plt.show()
 
 class base:
     def __init__(
@@ -21,18 +26,18 @@ class base:
         m=0.067 * const.m_e,
         L=200e-9,
         N=100,
-        dt=1e-12,
+        dt=1,
     ):
         self.A0 = const.physical_constants["Bohr radius"][0]
         self.EH = const.physical_constants["Hartree energy"][0]  # J
-        self.eF = eF * self.A0 / self.EH
+        self.eF = eF * const.e * self.A0 / self.EH
         self.N = N
         self.L = L / self.A0  # in ab
         self.m = m / const.m_e
         self.dx = self.L / N  # in ab
         self.sigma = sigma / self.A0
         self.k = k * self.A0
-        self.dt = dt / const.physical_constants["atomic unit of time"][0]
+        self.dt = dt # lets say dt is already in AU. # / const.physical_constants["atomic unit of time"][0]
         self.__init_grid()
 
     def __init_grid(self):
@@ -45,7 +50,7 @@ class base:
         )
         self.normalize(axis=0)
         self.psi[1][1 : 2 * self.N] = self.psi[0][1 : 2 * self.N] * np.exp(
-            -1j * self.Eavg(self.psi[0])
+            -1j * self.Eavg(self.psi[0]) * self.dt
         )
 
     def normalize(self, axis=1):
