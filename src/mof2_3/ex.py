@@ -3,11 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def ex3():
+def ex3(F=0.75 * 1e-3 / 1e-9, out="ex3"):
     target_iterations = int(1e4)
     time_step = 100
 
-    b = base()
+    b = base(eF=F)
     p = []
     for i in range(target_iterations):
         if i % time_step == 0:
@@ -23,14 +23,14 @@ def ex3():
     )
     ax.set_xlabel("Położenie [m]")
     ax.set_ylabel("Czas [dt]")
-    fig.savefig("ex3.svg", format="svg")
+    fig.savefig(f"{out}.svg", format="svg")
     plt.close(fig)
 
 
-def ex4():
+def ex4(out="ex4", F=0.75 * 1e-3 / 1e-9):
     target_iterations = int(1e4)
     time_step = 100
-    b = base()
+    b = base(eF=F)
     xs = []
     xs_analitical = []
     for i in range(target_iterations):
@@ -50,8 +50,13 @@ def ex4():
     ax.set_ylabel("$\\left<x\\right>$ [m]")
     ax.grid()
 
-    fig.savefig("ex4.svg", format="svg")
+    fig.savefig(f"{out}.svg", format="svg")
     plt.close(fig)
+
+
+def ex5():
+    ex3(out="ex5_mesh", F=0)
+    ex4(out="ex5_expected_x", F=0)
 
 
 class base:
