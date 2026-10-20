@@ -10,7 +10,8 @@ def ex3(F=0.75 * 1e-3 / 1e-9, out="ex3", target_iterations=1e4):
     start = time.perf_counter()
 
     target_iterations = int(target_iterations)
-    time_step = 100
+    no_time_lines = 200
+    time_step = int(target_iterations/no_time_lines)
 
     b = base(eF=F)
     p = []
@@ -68,7 +69,7 @@ def ex4(out="ex4", F=0.75 * 1e-3 / 1e-9, target_iterations=1e4):
     plt.close(fig)
 
     end = time.perf_counter()
-    print(f"Ex3: Done. Took {end-start:.4f} seconds")
+    print(f"Ex4: Done. Took {end-start:.4f} seconds")
 
 
 def ex5():
