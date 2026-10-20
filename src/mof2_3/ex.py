@@ -16,11 +16,13 @@ def ex3(F=0.75 * 1e-3 / 1e-9, out="ex3"):
         b.time_step()
 
     fig, ax = plt.subplots()
-    ax.pcolormesh(
+    mesh = ax.pcolormesh(
         b.x * b.A0,
         np.linspace(0, target_iterations, int(target_iterations / time_step)),
         p,
     )
+    cbar = fig.colorbar(mesh, ax=ax)
+    cbar.set_label("$\\Psi$")
     ax.set_xlabel("Położenie [m]")
     ax.set_ylabel("Czas [dt]")
     fig.savefig(f"{out}.svg", format="svg")
